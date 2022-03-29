@@ -31,6 +31,7 @@ module.exports = function (config) {
       '**/*.js.map',
       'test/spec/behavior/*.js',
       'test/spec/renderer/features.js',
+       'test/spec/util/util.js',
     ],
 
     proxies: {
