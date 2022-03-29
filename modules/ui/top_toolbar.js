@@ -36,7 +36,7 @@ export function uiTopToolbar(context) {
       let tools = [sidebarToggle, 'spacer', modes, rapidFeatures];
 
       if (notesEnabled()) {
-        tools.push('spacer', notes);
+        // tools.push('spacer', notes);
       }
 
       tools.push('spacer', undoRedo, save);
