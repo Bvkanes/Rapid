@@ -31,8 +31,6 @@ export class PixiTextures {
     const loader = PIXI.Loader.shared;
     const assetPath = context.assetPath();
 
- // During tests we might be reloading the map several times. If so, don't reload the resource spritesheets.
-    if (!loader.resources[`${assetPath}img/icons/maki-spritesheet.json`]) {
       loader.add(`${assetPath}img/icons/maki-spritesheet.json`);
       loader.add(`${assetPath}img/icons/temaki-spritesheet.json`);
       loader.add(`${assetPath}img/icons/fontawesome-spritesheet.json`);
@@ -57,7 +55,7 @@ export class PixiTextures {
           ];
         this.loaded = true;
       });
-    }
+
     // Load patterns
     context.pixi.rapidTextureKeys = [
       'bushes', 'cemetery', 'cemetery_buddhist', 'cemetery_christian', 'cemetery_jewish', 'cemetery_muslim',
