@@ -12,6 +12,7 @@ import { prefs } from './preferences';
 import { coreHistory } from './history';
 import { coreValidator } from './validator';
 import { coreUploader } from './uploader';
+import { UrlHash } from './UrlHash';
 
 import { BehaviorDrag } from '../behaviors/BehaviorDrag';
 import { BehaviorDraw } from '../behaviors/BehaviorDraw';
@@ -80,7 +81,7 @@ export function coreContext() {
   /* User interface and keybinding */
   let _ui;
   context.ui = () => _ui;
-  // AFAICT this is just used to localize the intro? for now - instead get this from pixi?
+  // AFAICT `lastPointerType` is just used to localize the intro? for now - instead get this from pixi?
   // context.lastPointerType = () => _ui.lastPointerType();
   context.lastPointerType = () => 'mouse';
 
@@ -89,17 +90,18 @@ export function coreContext() {
   d3_select(document).call(_keybinding);
 
 
-  /* Straight accessors. Avoid using these if you can. */
   // Instantiate the connection here because it doesn't require passing in
   // `context` and it's needed for pre-init calls like `preauth`
   let _connection = services.osm;
   let _history;
-  let _validator;
   let _uploader;
+  let _urlhash;
+  let _validator;
   context.connection = () => _connection;
   context.history = () => _history;
-  context.validator = () => _validator;
   context.uploader = () => _uploader;
+  context.urlhash = () => _urlhash;
+  context.validator = () => _validator;
 
   /* Connection */
   context.preauth = (options) => {
@@ -259,12 +261,11 @@ export function coreContext() {
 
     _inIntro = val;
 
-    const uihash = _ui?.uihash;
-    if (uihash) {
+    if (_urlhash) {
       if (val) {
-        uihash.enable();
+        _urlhash.enable();
       } else {
-        uihash.disable();
+        _urlhash.disable();
       }
     }
     return context;
@@ -652,10 +653,10 @@ export function coreContext() {
   };
 
 
-  /* Projections */
+  /* Projection */
   context.projection = new Projection();
 
-  /* RapiD */
+  /* Rapid */
   let _rapidContext;
   context.rapidContext = () => _rapidContext;
 
@@ -689,9 +690,10 @@ export function coreContext() {
       _map = new RendererMap(context);
       _photos = new RendererPhotos(context);
       _rapidContext = coreRapidContext(context);
+      _urlhash = new UrlHash(context);
       _ui = uiInit(context);
 
-      // Instantiate behaviors
+      // Instantiate Behaviors
       [
         new BehaviorDrag(context),
         new BehaviorDraw(context),
@@ -703,7 +705,7 @@ export function coreContext() {
         new BehaviorSelect(context)
       ].forEach(behavior => context.behaviors.set(behavior.id, behavior));
 
-      // Instantiate modes
+      // Instantiate Modes
       [
         new ModeAddNote(context),
         new ModeAddPoint(context),
