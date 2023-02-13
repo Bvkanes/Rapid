@@ -64,7 +64,7 @@ export function uiInit(context) {
 
     link.searchParams.append('browser', browser);
     link.searchParams.append('URL', window.location.href);
-    link.searchParams.append('version', context.rapidContext().version);
+    link.searchParams.append('version', context.version);
 
     window.open(link.toString(), '_blank');
   };
